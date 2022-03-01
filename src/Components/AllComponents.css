@@ -1,0 +1,24 @@
+.brillo {
+  animation-name: shine;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.banner-register-page {
+  width: 525px;
+}
+.logo {
+  width: 160px;
+}
+.session-login {
+  width: 400px;
+}
+
+@keyframes shine {
+  from {
+    filter: brightness(1.2);
+  }
+  to {
+    filter: brightness(1.65);
+  }
+}
