@@ -6,6 +6,7 @@ import { LandingPage } from './Views/LandingPage';
 import { CrearRifa } from './Views/CrearRifa';
 import { RegistForm } from './Components/RegistForm';
 import { SessionLogin } from './Views/SessionLogin';
+import { Dashboard } from './Views/Dashboard';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/registro" element={<RegistForm />} />
         <Route path="/rifa" element={<HomeRifa />} />
         <Route path="/crear-rifa" element={<CrearRifa />} />
+        <Route path="/dashboard/:id" element={<Dashboard />} exact />
       </Routes>
     </Router>
   );

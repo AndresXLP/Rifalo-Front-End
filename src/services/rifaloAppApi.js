@@ -12,6 +12,16 @@ export const RifaloAppApi = {
       return error.response.data;
     }
   },
+  async signIn(data) {
+    try {
+      const response = await axios.post('signIn', data);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error.response);
+      return error.response.data;
+    }
+  },
   async getAllRaffles() {
     try {
       const response = await axios.get('/allRaffles');

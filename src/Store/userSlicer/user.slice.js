@@ -6,14 +6,20 @@ export const signUp = createAsyncThunk('user/signUp', (data) =>
   RifaloAppApi.signUp(data)
 );
 export const signIn = createAsyncThunk('user/signIn', (data) =>
-  RifaloAppApi.loginUser(data)
+  RifaloAppApi.signIn(data)
 );
 
 //* SLICE DEFINITION
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
+    user: JSON.parse(window.localStorage.getItem('user')) || null,
     signUpState: {
+      loading: false,
+      status: '',
+      message: '',
+    },
+    signInState: {
       loading: false,
       status: '',
       message: '',
@@ -26,6 +32,34 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(signIn.pending, (state) => {
+        state.signInState.loading = true;
+      })
+      .addCase(signIn.fulfilled, (state, action) => {
+        state.signInState.loading = false;
+        state.signInState.status = action.payload.status;
+        if (action.payload.status === 'unregistered') {
+          state.signInState.message = action.payload.msg;
+          return;
+        }
+        if (action.payload.status === 'wrong') {
+          state.signInState.message = action.payload.msg;
+          return;
+        }
+        if (action.payload.status === 'logged') {
+          state.signInState.message = action.payload.msg;
+          window.localStorage.setItem(
+            'user',
+            JSON.stringify(action.payload.user)
+          );
+          window.localStorage.setItem(
+            'token',
+            JSON.stringify(action.payload.token)
+          );
+          state.user = action.payload.user;
+          return;
+        }
+      })
       .addCase(signUp.pending, (state) => {
         state.signUpState.loading = true;
       })
