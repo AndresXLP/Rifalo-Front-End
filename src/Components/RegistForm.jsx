@@ -2,41 +2,59 @@ import './AllComponents.css';
 import { Button, Form, FormControl, InputGroup, Card } from 'react-bootstrap';
 import background from '../image/Background-register-page.png';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clear, selectUser, signUp } from '../Store/userSlicer/user.slice';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export const RegistForm = () => {
+  const { loading, status, message } = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const initialValues = {
     name: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    validatePassword: true,
   };
 
   const [valueForms, setValueForms] = useState(initialValues);
-  const [validated, setValidated] = useState(false);
+  const [matchPass, setMatchPass] = useState(true);
 
   const handleChange = (e) => {
+    setMatchPass(true);
     const { name, value } = e.target;
     setValueForms({ ...valueForms, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    }
-    if (valueForms.password !== valueForms.confirmPassword) {
-      setValueForms({ ...valueForms, validatePassword: false });
-      e.stopPropagation();
+    const { password, confirmPassword } = valueForms;
+    if (password !== confirmPassword) {
+      setMatchPass(false);
     } else {
-      setValueForms({ ...valueForms, validatePassword: true });
+      setMatchPass(true);
+      dispatch(signUp(valueForms));
     }
-    setValidated(true);
+  };
+  const registroAlert = () => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Registro de Usuario',
+      text: message,
+    }).then(() => {
+      if (status === 'Success') {
+        navigate('/sessionlogin');
+        return;
+      }
+      dispatch(clear());
+      setValueForms(initialValues);
+    });
   };
   return (
     <div className="container">
+      {message && registroAlert()}
       <div className="row mt-5">
         <h1 className="text-center mb-5">
           <strong>
@@ -58,12 +76,15 @@ export const RegistForm = () => {
               </h4>
             </Card.Header>
             <Card.Body>
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
                   <InputGroup className="mb-3">
                     <InputGroup.Text>Tus Datos</InputGroup.Text>
                     <FormControl
                       required
+                      value={valueForms.name}
+                      minLength={3}
+                      disabled={loading ? true : false}
                       name="name"
                       aria-label="First name"
                       placeholder="Nombre"
@@ -71,60 +92,61 @@ export const RegistForm = () => {
                     />
                     <FormControl
                       required
+                      value={valueForms.lastName}
+                      minLength={3}
+                      disabled={loading ? true : false}
                       name="lastName"
                       aria-label="Last name"
                       placeholder="Apellido"
                       onChange={handleChange}
                     />
-                    <Form.Control.Feedback type="invalid">
-                      Nombre y Apellido son Requeridos!
-                    </Form.Control.Feedback>
                   </InputGroup>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Group className="mb-3">
                   <Form.Control
                     required
+                    value={valueForms.email}
+                    disabled={loading ? true : false}
                     name="email"
                     type="email"
                     placeholder="Correo Electronico"
                     onChange={handleChange}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    Correo es Requerido!
-                  </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3">
                   <Form.Control
                     required
+                    value={valueForms.password}
+                    minLength={4}
+                    disabled={loading ? true : false}
                     name="password"
                     type="password"
                     placeholder="Contraseña"
                     onChange={handleChange}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    Contraseña es Requerido!
-                  </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3">
                   <Form.Control
                     required
+                    value={valueForms.confirmPassword}
+                    minLength={4}
+                    disabled={loading ? true : false}
                     name="confirmPassword"
                     type="password"
                     placeholder="Confirmar Contraseña"
                     onChange={handleChange}
                   />
-                  <Form.Control.Feedback type="invalid">
-                    Contraseña es Requerida!
-                  </Form.Control.Feedback>
-                  {!valueForms.validatePassword && (
-                    <p className="text-danger">Las Contraseñas no coinciden!</p>
-                  )}
+                  <p className="text-danger">
+                    {valueForms.password !== '' &&
+                      !matchPass &&
+                      'Contraseñas no coinciden'}
+                  </p>
                 </Form.Group>
-                <Button variant="primary" type="submit">
-                  Registrarme
+                <Button variant="primary" type="submit" disabled={loading}>
+                  {loading ? 'Registrando Usuario' : 'Registrate'}
                 </Button>
               </Form>
             </Card.Body>

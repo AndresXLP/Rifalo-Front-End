@@ -1,25 +1,40 @@
+import { useEffect } from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+  getAllRaffles,
+  selectRaffles,
+} from '../Store/raffleSlicer/raffle.slice';
 
 export const LandingPage = () => {
+  const raffleState = useSelector(selectRaffles);
+  const { loading, raffles } = raffleState;
+  console.log(raffles);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllRaffles());
+  }, []);
   return (
-    <div className="container position-relative">
-      <div className="row position-absolute top-0 start-50 translate-middle-x">
+    <div className="container">
+      <div className="row">
         <div className="col">
           <h1 className="mt-5 text-center">Rifas Activas</h1>
         </div>
         <div className="row mt-3">
-          <div className="col">
+          <div className="col-6">
             <Row xs={1} md={2} className="g-4">
-              {Array.from({ length: 4 }).map((_, idx) => (
+              {raffles.map((item, idx) => (
                 <Col>
                   <Card>
                     <Card.Img variant="top" src="holder.js/100px160" />
                     <Card.Body>
-                      <Card.Title>Card title</Card.Title>
+                      <Card.Title>
+                        Se Rifa: <em>{item.productRaffle}</em>
+                      </Card.Title>
+                      <Card.Text>{item.descriptionRaffle}</Card.Text>
                       <Card.Text>
-                        This is a longer card with supporting text below as a
-                        natural lead-in to additional content. This content is a
-                        little bit longer.
+                        Precio Numero: <em>{item.price}</em>
                       </Card.Text>
                     </Card.Body>
                   </Card>
