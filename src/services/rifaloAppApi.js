@@ -1,6 +1,14 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:3001';
+const token = JSON.parse(window.localStorage.getItem('token')) || '';
+
+const headerPost = {
+  headers: {
+    authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+};
 
 export const RifaloAppApi = {
   async signUp(data) {
@@ -29,6 +37,21 @@ export const RifaloAppApi = {
       return response.data.raffles;
     } catch (error) {
       console.log(error.response);
+    }
+  },
+  async createRaffle({ dataFile, formValues }) {
+    try {
+      const urlImage = await axios.post('/upload-image', dataFile, headerPost);
+      console.log(urlImage);
+      formValues.image = urlImage.data;
+      const response = await axios.post(
+        '/create-raffle',
+        formValues,
+        headerPost
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
     }
   },
 };

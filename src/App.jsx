@@ -16,7 +16,7 @@ function App() {
         <Route path="*" element={<LandingPage />} />
         <Route path="/sessionlogin" element={<SessionLogin />} />
         <Route path="/registro" element={<RegistForm />} />
-        <Route path="/rifa" element={<HomeRifa />} />
+        <Route path="/rifa/:id" element={<HomeRifa />} exact />
         <Route path="/crear-rifa" element={<CrearRifa />} />
         <Route path="/dashboard/:id" element={<Dashboard />} exact />
       </Routes>

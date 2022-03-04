@@ -1,7 +1,9 @@
+import './AllViews.css';
 import { useEffect } from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   getAllRaffles,
   selectRaffles,
@@ -22,23 +24,25 @@ export const LandingPage = () => {
           <h1 className="mt-5 text-center">Rifas Activas</h1>
         </div>
         <div className="row mt-3">
-          <div className="col-6">
-            <Row xs={1} md={2} className="g-4">
+          <div className="col-12">
+            <Row xs={2} md={4} className="g-4">
               {raffles.map((item, idx) => (
-                <Col>
-                  <Card>
-                    <Card.Img variant="top" src="holder.js/100px160" />
-                    <Card.Body>
-                      <Card.Title>
-                        Se Rifa: <em>{item.productRaffle}</em>
-                      </Card.Title>
-                      <Card.Text>{item.descriptionRaffle}</Card.Text>
-                      <Card.Text>
-                        Precio Numero: <em>{item.price}</em>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                <Link to={`/rifa/${item._id}`} className="rifa-link">
+                  <Col key={idx}>
+                    <Card className="p-2">
+                      <Card.Img variant="top" src={item.image} />
+                      <Card.Body>
+                        <Card.Title>
+                          Se Rifa: <br />
+                          <em>{item.productRaffle}</em>
+                        </Card.Title>
+                        <Card.Text>
+                          Precio Numero: <em>{item.price}</em>
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Link>
               ))}
             </Row>
           </div>

@@ -1,3 +1,12 @@
 .boton-width {
   width: 43px;
 }
+
+.rifa-link {
+  text-decoration: none;
+  color: black;
+}
+
+.rifa-link:hover {
+  padding: 0 1rem 1rem 1rem;
+}

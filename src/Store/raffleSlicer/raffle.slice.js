@@ -5,7 +5,11 @@ import { RifaloAppApi } from '../../services/rifaloAppApi';
 export const getAllRaffles = createAsyncThunk('raffle/getAllRaffles', () =>
   RifaloAppApi.getAllRaffles()
 );
-
+export const createRaflle = createAsyncThunk(
+  'raffle/createRaflle',
+  ({ dataFile, formValues }) =>
+    RifaloAppApi.createRaffle({ dataFile, formValues })
+);
 //* SLICE DEFINITION
 export const raffleSlice = createSlice({
   name: 'raffle',
