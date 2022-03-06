@@ -5,11 +5,19 @@ import { RifaloAppApi } from '../../services/rifaloAppApi';
 export const getAllRaffles = createAsyncThunk('raffle/getAllRaffles', () =>
   RifaloAppApi.getAllRaffles()
 );
+export const getRaffleById = createAsyncThunk('raffle/getRaffleById', (id) =>
+  RifaloAppApi.getRaffleById(id)
+);
 export const createRaflle = createAsyncThunk(
   'raffle/createRaflle',
   ({ dataFile, formValues }) =>
     RifaloAppApi.createRaffle({ dataFile, formValues })
 );
+export const updateRaffleNumber = createAsyncThunk(
+  'raffle/updateRaffleNumber',
+  (data) => RifaloAppApi.updateRaffleNumber(data)
+);
+
 //* SLICE DEFINITION
 export const raffleSlice = createSlice({
   name: 'raffle',
@@ -17,6 +25,13 @@ export const raffleSlice = createSlice({
     raffleState: {
       loading: false,
       raffles: [],
+      raffle: {},
+      raffleReserved: '',
+    },
+  },
+  reducers: {
+    clear(state) {
+      state.raffleState.raffleReserved = '';
     },
   },
   extraReducers: (builder) => {
@@ -25,10 +40,27 @@ export const raffleSlice = createSlice({
         state.raffleState.loading = true;
       })
       .addCase(getAllRaffles.fulfilled, (state, action) => {
+        state.raffleState.loading = false;
         state.raffleState.raffles = action.payload;
+      })
+      .addCase(getRaffleById.pending, (state) => {
+        state.raffleState.loading = true;
+      })
+      .addCase(getRaffleById.fulfilled, (state, action) => {
+        state.raffleState.loading = false;
+        state.raffleState.raffle = action.payload;
+      })
+      .addCase(updateRaffleNumber.pending, (state) => {
+        state.raffleState.loading = true;
+      })
+      .addCase(updateRaffleNumber.fulfilled, (state, action) => {
+        state.raffleState.loading = false;
+        state.raffleState.raffleReserved = action.payload.msg;
       });
   },
 });
+
+export const { clear } = raffleSlice.actions;
 
 export const selectRaffles = (state) => state.raffle.raffleState;
 

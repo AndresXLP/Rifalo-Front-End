@@ -123,7 +123,9 @@ export const CrearRifa = () => {
                 onChange={handleChange}
                 value={formValues.lottery}
               >
-                <option defaultValue={''}>Juega con...</option>
+                <option value={''} disabled>
+                  Juega con...
+                </option>
                 {chance.map((name, idx) => (
                   <option key={idx} value={name}>
                     {name}

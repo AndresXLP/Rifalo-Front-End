@@ -1,107 +1,220 @@
-import { Card, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { Card, Button, Modal } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import './AllViews.css';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clear,
+  getRaffleById,
+  selectRaffles,
+  updateRaffleNumber,
+} from '../Store/raffleSlicer/raffle.slice';
+import { useParams } from 'react-router-dom';
 const MySwal = withReactContent(Swal);
-export const total = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-  41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-  60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78,
-  79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
-  98, 99,
-];
+
 export const HomeRifa = () => {
+  const { id } = useParams();
+  console.log(id);
+  const dispatch = useDispatch();
+  const { raffle, loading, raffleReserved } = useSelector(selectRaffles);
+  console.log(`🤖 ~ file: HomeRifa.jsx ~ line 20 ~ HomeRifa ~ raffle`, raffle);
+  const { productRaffle, descriptionRaffle, date, image } = raffle;
+  useEffect(() => {
+    dispatch(getRaffleById(id));
+  }, [dispatch, id, raffleReserved]);
+
   const initialState = {
     name: '',
     lastName: '',
     email: '',
     phone: '',
+    id: '',
+    number: '',
   };
-  const [numberValue, setNumberValue] = useState(initialState);
+  const [numberData, setNumberData] = useState(initialState);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setNumberValue((prevState) => ({ ...prevState, [name]: value }));
+    setNumberData({ ...numberData, [name]: value });
   };
+  const [show, setShow] = useState(false);
 
-  const handleClick = (num) => {
-    MySwal.fire({
-      allowOutsideClick: false,
-      title: `Reservar el Numero ${num} ${numberValue.name}`,
-      text: `Nombre $`,
-      html: (
-        <div>
-          <div className="input-group input-group-sm mb-3">
-            <span className="input-group-text">Nombre</span>
-            <input
-              type="text"
-              name="name"
-              onChange={handleChange}
-              className="form-control"
-            />
-            <span className="input-group-text">Apellido</span>
-            <input
-              type="text"
-              name="lastName"
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-          <div className="input-group input-group-sm mb-3">
-            <span className="input-group-text">Correo</span>
-            <input
-              type="text"
-              name="email"
-              onChange={handleChange}
-              className="form-control"
-            />
-            <span className="input-group-text">Telefono</span>
-            <input
-              type="text"
-              name="phone"
-              onChange={handleChange}
-              className="form-control"
-            />
-          </div>
-        </div>
-      ),
-    }).then(async () => {
-      await MySwal.fire(`Nombre: ${numberValue.name}`);
+  const handleClose = () => {
+    setNumberData(initialState);
+    setShow(false);
+  };
+  const handleShow = (num) => {
+    console.log(
+      `🤖 ~ file: HomeRifa.jsx ~ line 46 ~ handleShow ~ num`,
+      num.raffleNumber
+    );
+    setNumberData({
+      ...numberData,
+      id: raffle._id,
+      number: num.raffleNumber,
+    });
+
+    setShow(true);
+  };
+  const handleSubmit = () => {
+    dispatch(updateRaffleNumber(numberData));
+    handleClose();
+    MySwal.fire('Numero Reservado exitosamente').then(() => {
+      dispatch(clear());
     });
   };
 
   return (
     <div className="container mt-3">
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reservar el numero</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <div className="input-group input-group-sm mb-3">
+              <span className="input-group-text">Nombre</span>
+              <input
+                type="text"
+                required
+                name="name"
+                onChange={handleChange}
+                className="form-control"
+              />
+              <span className="input-group-text">Apellido</span>
+              <input
+                type="text"
+                required
+                name="lastName"
+                onChange={handleChange}
+                className="form-control"
+              />
+            </div>
+            <div className="input-group input-group-sm mb-3">
+              <span className="input-group-text">Correo</span>
+              <input
+                type="email"
+                required
+                name="email"
+                onChange={handleChange}
+                className="form-control"
+              />
+              <span className="input-group-text">Telefono</span>
+              <input
+                type="number"
+                required
+                name="phone"
+                onChange={handleChange}
+                className="form-control"
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button
+            variant="primary"
+            onClick={!loading ? handleSubmit : null}
+            disabled={loading}
+          >
+            {loading ? 'Reservando...' : 'Reservar'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <div className="row">
         <div className="col">
-          <Card className="text-center">
-            <Card.Header>Se Rifa...</Card.Header>
-            <Card.Body>
-              <Card.Title>Celular</Card.Title>
-              <Card.Text>Informacion del Celular</Card.Text>
-              <Button variant="primary">Ver Imagen</Button>
-            </Card.Body>
-            <Card.Footer className="text-muted">
-              Juega el dia 25 de Febrero de 2022 / con las 2 Ultimas Cifras de
-              la loteria de La Caribeña
-            </Card.Footer>
-          </Card>
+          {raffle && (
+            <Card className="text-center">
+              <Card.Header>Se Rifa...</Card.Header>
+              <Card.Body>
+                <Card.Title>{productRaffle}</Card.Title>
+                <Card.Text>{descriptionRaffle}</Card.Text>
+                <Button
+                  className="me-1"
+                  variant="primary"
+                  onClick={() =>
+                    MySwal.fire({
+                      html: (
+                        <em>
+                          <strong>Imagen de Referencia</strong>
+                        </em>
+                      ),
+                      imageUrl: image,
+                      imageAlt: productRaffle,
+                    })
+                  }
+                >
+                  Ver Imagen
+                </Button>
+                <Button
+                  className="ms-1"
+                  variant="primary"
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `http://localhost:3000/rifa/${raffle._id}`
+                    )
+                  }
+                >
+                  Compartir Link
+                </Button>
+              </Card.Body>
+              <Card.Footer className="text-muted">
+                Juega el dia{' '}
+                <em>
+                  <strong>{date && date.substring(0, 10)}</strong>
+                </em>{' '}
+                con las 2 Ultimas Cifras de{' '}
+                <em>
+                  <strong>{raffle.lottery}</strong>
+                </em>
+              </Card.Footer>
+            </Card>
+          )}
         </div>
       </div>
       <div className="row mt-3">
         <div className="col">
-          {total.map((num) => (
-            <button
-              key={num}
-              className="btn btn-primary btn-sm m-1 boton-width"
-              onClick={() => handleClick(num)}
-            >
-              {num}
-            </button>
-          ))}
+          <Card>
+            <Card.Header>
+              <h4 className="text-center text-primary">
+                Valor Numero: {raffle.price}
+                <br />
+                <button
+                  disabled
+                  className={`btn btn-success btn-sm m-1 boton-width col-2`}
+                >
+                  Numeros Disponibles
+                </button>
+                <button
+                  disabled
+                  className={`btn btn-danger btn-sm m-1 boton-width col-2`}
+                >
+                  Numeros Reservados
+                </button>
+              </h4>
+            </Card.Header>
+            <Card.Body>
+              {raffle.numbers && (
+                <div className="col">
+                  {raffle.numbers.map((num) => (
+                    <button
+                      key={num.raffleNumber}
+                      className={`btn ${
+                        num.selected ? `btn-danger` : `btn-success`
+                      } btn-sm m-1 boton-width`}
+                      onClick={() => handleShow(num)}
+                      disabled={num.selected}
+                    >
+                      {num.raffleNumber}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Card.Body>
+          </Card>
         </div>
       </div>
     </div>

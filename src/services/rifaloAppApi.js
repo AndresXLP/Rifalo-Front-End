@@ -9,6 +9,12 @@ const headerPost = {
     'Content-Type': 'application/json',
   },
 };
+const headerPut = {
+  headers: {
+    authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
+};
 
 export const RifaloAppApi = {
   async signUp(data) {
@@ -39,6 +45,15 @@ export const RifaloAppApi = {
       console.log(error.response);
     }
   },
+  async getRaffleById(id) {
+    try {
+      const response = await axios.get(`/raffle/${id}`);
+      console.log(response.data);
+      return response.data.raffle;
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
   async createRaffle({ dataFile, formValues }) {
     try {
       const urlImage = await axios.post('/upload-image', dataFile, headerPost);
@@ -52,6 +67,22 @@ export const RifaloAppApi = {
       console.log(response.data);
     } catch (error) {
       console.log(error);
+    }
+  },
+  async updateRaffleNumber(data) {
+    console.log(
+      `🤖 ~ file: rifaloAppApi.js ~ line 73 ~ updateRaffleNumber ~ data`,
+      data
+    );
+    try {
+      const response = await axios.put('/raffle/updateNumber', data, headerPut);
+      console.log(
+        `🤖 ~ file: rifaloAppApi.js ~ line 75 ~ updateRaffleNumber ~ response`,
+        response
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error.response);
     }
   },
 };
