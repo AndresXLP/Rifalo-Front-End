@@ -11,9 +11,12 @@ import {
   updateRaffleNumber,
 } from '../Store/raffleSlicer/raffle.slice';
 import { useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 const MySwal = withReactContent(Swal);
 
 export const HomeRifa = () => {
+  const notify = () => toast.success('Link Copiado');
   const { id } = useParams();
   console.log(id);
   const dispatch = useDispatch();
@@ -152,14 +155,16 @@ export const HomeRifa = () => {
                 <Button
                   className="ms-1"
                   variant="primary"
-                  onClick={() =>
+                  onClick={() => {
+                    notify();
                     navigator.clipboard.writeText(
                       `http://localhost:3000/rifa/${raffle._id}`
-                    )
-                  }
+                    );
+                  }}
                 >
                   Compartir Link
                 </Button>
+                <ToastContainer position="top-right" autoClose={2000} />
               </Card.Body>
               <Card.Footer className="text-muted">
                 Juega el dia{' '}

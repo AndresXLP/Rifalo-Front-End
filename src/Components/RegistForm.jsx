@@ -3,12 +3,16 @@ import { Button, Form, FormControl, InputGroup, Card } from 'react-bootstrap';
 import background from '../image/Background-register-page.png';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clear, selectUser, signUp } from '../Store/userSlicer/user.slice';
+import {
+  clear,
+  selectUserSignUp,
+  signUp,
+} from '../Store/userSlicer/user.slice';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 export const RegistForm = () => {
-  const { loading, status, message } = useSelector(selectUser);
+  const { loading, status, message } = useSelector(selectUserSignUp);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const initialValues = {

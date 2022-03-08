@@ -23,7 +23,7 @@ export const raffleSlice = createSlice({
   name: 'raffle',
   initialState: {
     raffleState: {
-      loading: false,
+      loading: true,
       raffles: [],
       raffle: {},
       raffleReserved: '',
