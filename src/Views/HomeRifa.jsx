@@ -1,4 +1,4 @@
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Card, Button, Modal, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -15,7 +15,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 const MySwal = withReactContent(Swal);
 
-export const HomeRifa = () => {
+export const HomeRifa = ({ isAuth }) => {
   const notify = () => toast.success('Link Copiado');
   const { id } = useParams();
   console.log(id);
@@ -220,6 +220,53 @@ export const HomeRifa = () => {
               )}
             </Card.Body>
           </Card>
+        </div>
+      </div>
+      <div className="row mt-3">
+        <div className="col">
+          {isAuth && (
+            <Card>
+              <Card.Header className="text-center">
+                <em>
+                  <strong>Listado de compradores</strong>
+                </em>
+              </Card.Header>
+              <Card.Body className="my-custom-scrollbar">
+                <Table bordered hover responsive size="sm">
+                  <thead>
+                    <tr className="text-center">
+                      <th>Numero</th>
+                      <th>Nombre</th>
+                      <th>Apellido</th>
+                      <th>Correo</th>
+                      <th>Telefono</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {raffle.numbers &&
+                      raffle.numbers.map((num, idx) => (
+                        <tr
+                          key={idx}
+                          className={`text-center
+                           ${
+                             (num.selected && !num.payment && `bg-warning`) ||
+                             (num.selected && num.payment && `bg-success`)
+                           }
+                           
+                           bg-opacity-25`}
+                        >
+                          <td>{num.raffleNumber}</td>
+                          <td>{num.name}</td>
+                          <td>{num.lastName}</td>
+                          <td>{num.email}</td>
+                          <td>{num.phone}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          )}
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@ function App() {
           exact
         />
         <Route path="/registro" element={<RegistForm />} exact />
-        <Route path="/rifa/:id" element={<HomeRifa />} exact />
+        <Route path="/rifa/:id" element={<HomeRifa isAuth={user} />} exact />
         {user && (
           <>
             <Route path="/dashboard" element={<Dashboard />} exact />
