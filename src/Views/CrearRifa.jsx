@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import { InputGroup, FormControl, Form, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { createRaflle } from '../Store/raffleSlicer/raffle.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createRaflle,
+  selectRaffles,
+} from '../Store/raffleSlicer/raffle.slice';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const chance = [
   'Antioqueñita Día',
   'Dorado Mañana',
@@ -30,9 +36,19 @@ const chance = [
   'Paisa Lotto',
   'La Culona Noche',
 ];
+
 const fecha = new Date(Date.now());
 const hoy = fecha.toISOString().substring(0, 10);
+
+const MySwal = withReactContent(Swal);
+
 export const CrearRifa = () => {
+  const { idRaffle } = useSelector(selectRaffles);
+  console.log(
+    `🤖 ~ file: CrearRifa.jsx ~ line 41 ~ CrearRifa ~ idRaffle`,
+    idRaffle
+  );
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialValues = {
     date: '',
@@ -53,7 +69,16 @@ export const CrearRifa = () => {
     const dataFile = new FormData();
     dataFile.append('dataFile', file);
     dispatch(createRaflle({ dataFile, formValues }));
+    MySwal.fire({
+      icon: 'success',
+      text: 'Rifa Creada exitosamente',
+      showCloseButton: false,
+      showConfirmButton: true,
+      confirmButtonText: 'Aceptar',
+      allowOutsideClick: false,
+    });
   };
+  idRaffle && navigate(`/rifa/${idRaffle}`);
   return (
     <div className="container mt-5 position-relative">
       <div className="row position-absolute top-0 start-50 translate-middle-x">

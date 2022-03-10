@@ -57,19 +57,19 @@ export const RifaloAppApi = {
   async createRaffle({ dataFile, formValues }) {
     try {
       const urlImage = await axios.post('/upload-image', dataFile, headerPost);
-      console.log(urlImage);
       formValues.image = urlImage.data;
       const response = await axios.post(
         '/create-raffle',
         formValues,
         headerPost
       );
-      console.log(response.data);
+      return response.data._id;
     } catch (error) {
       console.log(error);
     }
   },
   async updateRaffleNumber(data) {
+    data.selected = true;
     console.log(
       `🤖 ~ file: rifaloAppApi.js ~ line 73 ~ updateRaffleNumber ~ data`,
       data

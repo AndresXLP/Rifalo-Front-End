@@ -27,6 +27,7 @@ export const raffleSlice = createSlice({
       raffles: [],
       raffle: {},
       raffleReserved: '',
+      idRaffle: '',
     },
   },
   reducers: {
@@ -36,6 +37,13 @@ export const raffleSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createRaflle.pending, (state) => {
+        state.raffleState.loading = true;
+      })
+      .addCase(createRaflle.fulfilled, (state, action) => {
+        state.raffleState.loading = false;
+        state.raffleState.idRaffle = action.payload;
+      })
       .addCase(getAllRaffles.pending, (state) => {
         state.raffleState.loading = true;
       })
