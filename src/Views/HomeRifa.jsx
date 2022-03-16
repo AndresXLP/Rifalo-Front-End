@@ -202,7 +202,7 @@ export const HomeRifa = ({ isAuth }) => {
                       onClick={() => {
                         notify();
                         navigator.clipboard.writeText(
-                          `http://localhost:3000/rifa/${raffle._id}`
+                          `https://rifalo-app.netlify.app/rifa/${raffle._id}`
                         );
                       }}
                     >
