@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = 'https://rifalo-app.herokuapp.com/';
 
 let token = JSON.parse(window.localStorage.getItem('token')) || null;
 console.log(`🤖 ~ file: rifaloAppApi.js ~ line 6 ~ token`, token);
