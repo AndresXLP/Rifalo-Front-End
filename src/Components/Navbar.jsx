@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../image/logo.png';
 import './AllComponents.css';
 import { Container, Nav, Navbar } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export const Navbar2 = ({ isAuth }) => {
   console.log(`🤖 ~ file: Navbar.jsx ~ line 7 ~ Navbar2 ~ isAuth`, isAuth);
