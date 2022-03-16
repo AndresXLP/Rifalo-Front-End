@@ -1,3 +1,6 @@
+Link {
+  text-decoration: none;
+}
 .brillo {
   animation-name: shine;
   animation-duration: 1.5s;

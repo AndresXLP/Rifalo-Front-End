@@ -2,6 +2,7 @@ import React from 'react';
 import logo from '../image/logo.png';
 import './AllComponents.css';
 import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Navbar2 = ({ isAuth }) => {
   console.log(`🤖 ~ file: Navbar.jsx ~ line 7 ~ Navbar2 ~ isAuth`, isAuth);
@@ -12,33 +13,55 @@ export const Navbar2 = ({ isAuth }) => {
     <div>
       <Navbar bg="success" variant="success">
         <Container>
-          <Navbar.Brand href="/">
-            <img src={logo} alt="Rifalo App Logo" className="logo brillo" />
+          <Navbar.Brand>
+            <Link to="/">
+              <img src={logo} alt="Rifalo App Logo" className="logo brillo" />
+            </Link>
           </Navbar.Brand>
 
           {isAuth ? (
             <Nav className="ms-auto">
-              <Nav.Link href="/dashboard" className="text-light">
-                Mis Rifas Activas
+              <Nav.Link>
+                <Link
+                  to="/dashboard"
+                  className="text-light text-decoration-none ms-2 me-2"
+                >
+                  Mis Rifas Activas
+                </Link>
               </Nav.Link>
-              <Nav.Link href="/crear-rifa" className="text-light">
-                Crear Nueva Rifa
+              <Nav.Link>
+                <Link
+                  to="/crear-rifa"
+                  className="text-light text-decoration-none ms-2 me-2"
+                >
+                  Crear Nueva Rifa
+                </Link>
               </Nav.Link>
               <Nav.Link
                 onClick={logout}
-                href="/registro"
-                className="text-light"
+                href="/"
+                className="text-light text-decoration-none ms-2 me-2"
               >
                 Cerrar Session
               </Nav.Link>
             </Nav>
           ) : (
             <Nav className="ms-auto">
-              <Nav.Link href="/sessionlogin" className="text-light">
-                Iniciar Sesion
+              <Nav.Link>
+                <Link
+                  to="/sessionlogin"
+                  className="text-light text-decoration-none ms-2 me-2"
+                >
+                  Iniciar Sesion
+                </Link>
               </Nav.Link>
-              <Nav.Link href="/registro" className="text-light">
-                Registrate
+              <Nav.Link>
+                <Link
+                  to="/registro"
+                  className="text-light text-decoration-none ms-2 me-2"
+                >
+                  Registrate
+                </Link>
               </Nav.Link>
             </Nav>
           )}

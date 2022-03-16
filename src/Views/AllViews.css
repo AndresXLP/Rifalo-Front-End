@@ -1,14 +1,23 @@
 .boton-width {
   width: 55px;
 }
-
+.image-card {
+  min-height: 188px;
+  width: min-content;
+  align-items: center;
+}
+.card-item:hover {
+  box-shadow: 5px 5px 1rem rgba(0, 0, 0, 0.3);
+}
 .rifa-link {
   text-decoration: none;
   color: black;
+  height: 325px;
+  margin: 0;
 }
 
 .rifa-link:hover {
-  padding: 0 1rem 1rem 1rem;
+  color: inherit;
 }
 
 .my-custom-scrollbar {

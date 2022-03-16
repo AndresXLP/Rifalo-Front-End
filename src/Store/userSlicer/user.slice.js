@@ -36,6 +36,10 @@ export const userSlice = createSlice({
         state.signInState.loading = true;
       })
       .addCase(signIn.fulfilled, (state, action) => {
+        console.log(
+          `🤖 ~ file: user.slice.js ~ line 39 ~ .addCase ~ action`,
+          action.payload
+        );
         state.signInState.loading = false;
         state.signInState.status = action.payload.status;
         if (action.payload.status === 'unregistered') {

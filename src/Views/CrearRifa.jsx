@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InputGroup, FormControl, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  clearStatus,
   createRaflle,
   selectRaffles,
 } from '../Store/raffleSlicer/raffle.slice';
@@ -50,6 +51,9 @@ export const CrearRifa = () => {
   );
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(clearStatus());
+  }, [dispatch]);
   const initialValues = {
     date: '',
     lottery: '',
@@ -71,14 +75,19 @@ export const CrearRifa = () => {
     dispatch(createRaflle({ dataFile, formValues }));
     MySwal.fire({
       icon: 'success',
-      text: 'Rifa Creada exitosamente',
+      text: 'Creando Rifa, seras redirigido automaticamente.',
       showCloseButton: false,
-      showConfirmButton: true,
-      confirmButtonText: 'Aceptar',
+      showConfirmButton: false,
       allowOutsideClick: false,
+      timerProgressBar: true,
+      timer: 3000,
     });
   };
-  idRaffle && navigate(`/rifa/${idRaffle}`);
+  if (idRaffle) {
+    setTimeout(() => {
+      navigate(`/rifa/${idRaffle}`);
+    }, 3000);
+  }
   return (
     <div className="container mt-5 position-relative">
       <div className="row position-absolute top-0 start-50 translate-middle-x">
