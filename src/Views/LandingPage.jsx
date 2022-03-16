@@ -1,7 +1,7 @@
 import './AllViews.css';
 import placeholderImage from '../image/placeholder-513.webp';
 import { useEffect } from 'react';
-import { Card, Button, Row, Col, Placeholder } from 'react-bootstrap';
+import { Card, Row, Col, Placeholder } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
