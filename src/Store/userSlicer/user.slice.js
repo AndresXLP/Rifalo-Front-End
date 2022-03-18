@@ -29,6 +29,10 @@ export const userSlice = createSlice({
     clear(state) {
       state.signUpState.message = '';
     },
+    logout(state) {
+      state.user = '';
+      window.localStorage.clear();
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -36,10 +40,6 @@ export const userSlice = createSlice({
         state.signInState.loading = true;
       })
       .addCase(signIn.fulfilled, (state, action) => {
-        console.log(
-          `🤖 ~ file: user.slice.js ~ line 39 ~ .addCase ~ action`,
-          action.payload
-        );
         state.signInState.loading = false;
         state.signInState.status = action.payload.status;
         if (action.payload.status === 'unregistered') {
@@ -68,7 +68,6 @@ export const userSlice = createSlice({
         state.signUpState.loading = true;
       })
       .addCase(signUp.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.signUpState.loading = false;
         if (action.payload.msg === 'Success') {
           state.signUpState.message = 'Usuario Registrado Exitosamente';
@@ -81,7 +80,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clear } = userSlice.actions;
+export const { clear, logout } = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;
 export const selectUserSignUp = (state) => state.user.signUpState;

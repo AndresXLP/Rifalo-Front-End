@@ -11,6 +11,11 @@ import {
   selectRaffles,
 } from '../Store/raffleSlicer/raffle.slice';
 import { Image, Transformation } from 'cloudinary-react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { logout } from '../Store/userSlicer/user.slice';
+const MySwal = withReactContent(Swal);
+
 const cloudName = process.env.REACT_APP_CLOUD_NAME;
 export const Dashboard = () => {
   const raffleState = useSelector(selectRaffles);
@@ -22,6 +27,12 @@ export const Dashboard = () => {
       dispatch(getMyRaffle());
     }, 1500);
   }, [dispatch]);
+  useEffect(() => {
+    if (status === 'token expired') {
+      MySwal.fire('Su sesión expiro');
+      dispatch(logout());
+    }
+  }, [dispatch, status]);
   return (
     <div className="container">
       <div className="row">
