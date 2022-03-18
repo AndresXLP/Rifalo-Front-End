@@ -15,7 +15,6 @@ const cloudName = process.env.REACT_APP_CLOUD_NAME;
 export const LandingPage = () => {
   const raffleState = useSelector(selectRaffles);
   const { loading, raffles, status } = raffleState;
-  console.log(raffles);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(clearStatus());

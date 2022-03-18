@@ -11,8 +11,8 @@ export const getMyRaffle = createAsyncThunk('raffle/getMyRaffle', (id) =>
 export const getRaffleById = createAsyncThunk('raffle/getRaffleById', (id) =>
   RifaloAppApi.getRaffleById(id)
 );
-export const createRaflle = createAsyncThunk(
-  'raffle/createRaflle',
+export const createRaffle = createAsyncThunk(
+  'raffle/createRaffle',
   ({ dataFile, formValues }) =>
     RifaloAppApi.createRaffle({ dataFile, formValues })
 );
@@ -48,12 +48,14 @@ export const raffleSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createRaflle.pending, (state) => {
+      .addCase(createRaffle.pending, (state) => {
         state.raffleState.loading = true;
       })
-      .addCase(createRaflle.fulfilled, (state, action) => {
+      .addCase(createRaffle.fulfilled, (state, action) => {
         state.raffleState.loading = false;
-        state.raffleState.idRaffle = action.payload;
+        action.payload === 'jwt expired'
+          ? (state.raffleState.status = 'token expired')
+          : (state.raffleState.idRaffle = action.payload);
       })
       .addCase(getAllRaffles.pending, (state) => {
         state.raffleState.loading = true;
@@ -71,7 +73,9 @@ export const raffleSlice = createSlice({
       })
       .addCase(getMyRaffle.fulfilled, (state, action) => {
         state.raffleState.loading = false;
-        state.raffleState.status = action.payload.status;
+        action.payload === 'jwt expired'
+          ? (state.raffleState.status = 'token expired')
+          : (state.raffleState.status = action.payload.status);
         state.raffleState.status === 'ok' &&
           (state.raffleState.raffles = action.payload.raffles);
       })

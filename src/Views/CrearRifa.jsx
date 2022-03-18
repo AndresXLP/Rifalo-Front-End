@@ -3,12 +3,13 @@ import { InputGroup, FormControl, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearStatus,
-  createRaflle,
+  createRaffle,
   selectRaffles,
 } from '../Store/raffleSlicer/raffle.slice';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { logout } from '../Store/userSlicer/user.slice';
 const chance = [
   'Antioqueñita Día',
   'Dorado Mañana',
@@ -44,16 +45,19 @@ const hoy = fecha.toISOString().substring(0, 10);
 const MySwal = withReactContent(Swal);
 
 export const CrearRifa = () => {
-  const { idRaffle } = useSelector(selectRaffles);
-  console.log(
-    `🤖 ~ file: CrearRifa.jsx ~ line 41 ~ CrearRifa ~ idRaffle`,
-    idRaffle
-  );
+  const { idRaffle, status } = useSelector(selectRaffles);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(clearStatus());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (status === 'token expired') {
+      MySwal.fire('Su sesión expiro');
+      dispatch(logout());
+    }
+  }, [dispatch, status]);
   const initialValues = {
     date: '',
     lottery: '',
@@ -72,7 +76,7 @@ export const CrearRifa = () => {
     e.preventDefault();
     const dataFile = new FormData();
     dataFile.append('dataFile', file);
-    dispatch(createRaflle({ dataFile, formValues }));
+    dispatch(createRaffle({ dataFile, formValues }));
     MySwal.fire({
       icon: 'success',
       text: 'Creando Rifa, seras redirigido automaticamente.',
@@ -83,11 +87,13 @@ export const CrearRifa = () => {
       timer: 3000,
     });
   };
+
   if (idRaffle) {
     setTimeout(() => {
       navigate(`/rifa/${idRaffle}`);
     }, 3000);
   }
+
   return (
     <div className="container mt-5 position-relative">
       <div className="row position-absolute top-0 start-50 translate-middle-x">

@@ -3,12 +3,11 @@ import logo from '../image/logo.png';
 import './AllComponents.css';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../Store/userSlicer/user.slice';
 
 export const Navbar2 = ({ isAuth }) => {
-  console.log(`🤖 ~ file: Navbar.jsx ~ line 7 ~ Navbar2 ~ isAuth`, isAuth);
-  const logout = () => {
-    window.localStorage.clear();
-  };
+  const dispatch = useDispatch();
   return (
     <div>
       <Navbar bg="success" variant="success">
@@ -38,7 +37,9 @@ export const Navbar2 = ({ isAuth }) => {
                 </Link>
               </Nav.Link>
               <Nav.Link
-                onClick={logout}
+                onClick={() => {
+                  dispatch(logout());
+                }}
                 href="/"
                 className="text-light text-decoration-none ms-2 me-2"
               >
